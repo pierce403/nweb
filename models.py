@@ -149,6 +149,12 @@ def search(query,limit,offset):
         result.append(item)
     return result
 
+def hostcount():
+    db = get_db()
+    cur = db.cursor().execute('select count(*) from hosts')
+    rowcount = cur.fetchone()[0]
+    return rowcount
+
 def newhost(host):
     db = get_db()
     ip = host["ip"]

@@ -69,7 +69,15 @@ def search():
     fmt=""
 
   context = nweb.search(q,100,100*int(str(p)))
-  return render_template("search2.html",query=q, numresults=len(context), hosts=context)
+  numresults = None
+  if not q:
+      t1 = time.time()
+      numresults = nweb.hostcount()
+      print("count took: %f seconds" % t1 - time.time())
+  else:
+      numresults = len(context)
+
+  return render_template("search2.html",query=q, numresults=numresults, hosts=context)
 
 
   #return render(request,"search.html",context)
