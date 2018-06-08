@@ -13,6 +13,14 @@ else
     echo "[+] Setup running with permissions. Automatic installation will be attempted."
 fi
 
+ELASTIC=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:9200)
+if [ $ELASTIC != "200" ]
+then
+    echo "[!] Could not detect elasticsearch running on localhost:9200. Make sure you connect the server to an elasticsearch instance in config.py"
+else
+    echo "[+] We got a response for http://localhost:9200, we're assuming this is elasticsearch."
+fi
+
 if ! hash python3 >/dev/null
 then
     echo "[!] python3 not found"
@@ -85,6 +93,9 @@ echo "[+] Entering virtual environment"
 source venv/bin/activate
 echo "[+] Attempting to install python dependencies"
 pip3 install -r requirements.txt
+echo "[+] Initializing metadata database"
+export FLASK_APP=nweb-server.py
+flask db upgrade
 echo "[+] Exiting virtual environment"
 deactivate
 echo "[+] Setup Complete"
