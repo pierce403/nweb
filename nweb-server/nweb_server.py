@@ -37,17 +37,17 @@ def search():
 
   searchOffset = app.config['RESULTS_PER_PAGE'] * (page-1)
   count,context = nweb.search(query,app.config['RESULTS_PER_PAGE'],searchOffset)
-
+  
   next_url = url_for('search', q=query, p=page + 1) \
-      if count > page * app.config['RESULTS_PER_PAGE'] else None
+      if count['value'] > page * app.config['RESULTS_PER_PAGE'] else None
   prev_url = url_for('search', q=query, p=page - 1) \
       if page > 1 else None
 
   # what kind of output are we looking for?
   if format == 'hostlist':
-    return render_template("hostlist.html",query=query, numresults=count, page=page, hosts=context)
+    return render_template("hostlist.html",query=query, numresults=count['value'], page=page, hosts=context)
   else:
-    return render_template("search.html",query=query, numresults=count, page=page, hosts=context, next_url=next_url, prev_url=prev_url)
+    return render_template("search.html",query=query, numresults=count['value'], page=page, hosts=context, next_url=next_url, prev_url=prev_url)
 
 @app.route('/getwork')
 def getwork():
