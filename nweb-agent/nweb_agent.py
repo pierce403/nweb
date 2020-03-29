@@ -37,7 +37,7 @@ def scan():
   rand = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(10))
   print("[+] Scan ID: "+rand)
 
-  command = ["nmap","-oA","data/nweb."+rand,"-A","-open",target]
+  command = ["nmap","-oA","data/nweb."+rand,"-sC","-sV","-open",target]
 
   if 'ports' in target_data:
     command.append('-p')
