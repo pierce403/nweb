@@ -38,7 +38,7 @@ def search():
   searchOffset = app.config['RESULTS_PER_PAGE'] * (page-1)
   count,context = nweb.search(query,app.config['RESULTS_PER_PAGE'],searchOffset)
   
-  if isinstance(count,int)
+  if isinstance(count,int):
     count = count['value']
 
   next_url = url_for('search', q=query, p=page + 1) \
