@@ -18,6 +18,10 @@ app = Flask(__name__,static_url_path='/static')
 app.config.from_object('config')
 app.jinja_env.add_extension('jinja2.ext.do')
 
+# functionality for metamask login goes here
+import metamask_login
+app.add_url_rule('login', view_func=metamask_login.login)
+
 @app.before_request
 def before_request():
   g.preview_length = app.config['PREVIEW_LENGTH']
