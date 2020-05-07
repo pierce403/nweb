@@ -4,7 +4,11 @@ export LC_ALL="C.UTF-8"
 export LANG="C.UTF-8"
 export FLASK_APP=./nweb_server.py
 
+source .env
+
 source venv/bin/activate
+pip3 install -r requirements.txt
+
 while [ 1 == 1 ]
 do
   echo `date` >> start.log

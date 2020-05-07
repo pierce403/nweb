@@ -32,7 +32,8 @@ def gethost(ip):
   result = es.get(index='nmap', doc_type='_doc', id=ip)
   return result['_source']
 
-def getwork_mass(): # getwork when masscan data is loaded
+# getwork when masscan data is loaded
+def getwork_elastic():
 
   # get random ip
   result = es.search(index="masscan_hosts", doc_type="_doc", body={"size": 1,"query": {"function_score": {"functions": [{"random_score": {"seed": random.randint(0,2**60)}}]}}})

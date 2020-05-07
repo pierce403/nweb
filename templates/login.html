@@ -1,0 +1,21 @@
+<html>
+<body bgcolor="black" text="white" link="white" alink="white" vlink="white">
+
+<center>
+<br><br><div id="msg">Please Enable Javascript</div><br><br>
+
+{% if user == 'None' %}
+Log in with <a href="https://metamask.io">Metamask</a>: <button onclick='login();'>Login</button>
+{%else %}
+Welcome {{user}}!
+<br><br>
+Your submit token is {{submit_token}}
+{% endif %}
+
+</center>
+
+<script src="static/ethers-v4.min.js"></script>
+<script src="static/metamask_login.js"></script>
+
+</body>
+</html>
