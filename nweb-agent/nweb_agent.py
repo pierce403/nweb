@@ -17,6 +17,7 @@ import multiprocessing.pool
 # my script for headshotting servers
 from getheadshot import getheadshot
 from config import Config
+from sys import argv, exit
 
 try:
   import ipaddress
@@ -26,10 +27,13 @@ except:
 
 config = Config()
 
-def scan():
+submit_token="none" # oveerridden by argv
+
+def scan(submit_token):
   server=config.server
   print("[+] Fetching Target from %s" % server)
   target_data = json.loads(requests.get(server+"/getwork").text)
+  print("OMG "+str(target_data))
   target = target_data["target"]
   print("[+] Target: "+target)
 
@@ -86,17 +90,25 @@ def scan():
 
   # submit result
   print("[+] (%s) Submitting work" % rand)
+  result['submit_token']=submit_token
   response=requests.post(server+"/submit",json=json.dumps(result)).text
   print("[+] (%s) Response:\n%s" % (rand, response))
 
 def main():
+
+  if len(argv)!=2:
+    exit("usage: nweb_agent.py <submit_token>")
+  
+  print(argv[1]) 
+  submit_token = argv[1] # pull in import source
+
   if not os.path.isdir("data"):
     os.mkdir("data")
   while True:
     if threading.active_count() < config.max_threads:
       notifylock=False
       print("[+] Active Threads: %s" % threading.active_count())
-      t = threading.Thread(target=scan)
+      t = threading.Thread(target=scan,args=[submit_token])
       t.start()
     else:
       if notifylock is False:

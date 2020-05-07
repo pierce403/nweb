@@ -22,7 +22,7 @@ from datetime import datetime
 
 app = Flask(__name__,static_url_path='/static')
 app.jinja_env.add_extension('jinja2.ext.do')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///uploads.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 db = SQLAlchemy(app)
 
 # Setup the Flask-JWT-Extended extension
@@ -38,7 +38,7 @@ app.config['JWT_CSRF_CHECK_FORM'] = True
 jwt = JWTManager(app)
 
 class User(db.Model):
-  username = db.Column(db.String(80), primary_key=True, unique=True)
+  user = db.Column(db.String(80), primary_key=True, unique=True)
   submit_token = db.Column(db.String(80))
   pointsEarned = db.Column(Integer, default=0)
   pointsRewarded = db.Column(Integer, default=0)
@@ -52,6 +52,10 @@ def setup():
     print("[+] created users db")
   except:
     print("[+] users db already exists")
+
+@app.before_request
+def before_request():
+  g.preview_length = 100
 
 # Create your views here.
 @app.route('/host')
@@ -99,6 +103,16 @@ def submit():
 
   newhost={}
   newhost=json.loads(data)
+  if 'submit_token' not in newhost:
+    return "no submit token supplied"
+
+  thisuser = User.query.filter_by(submit_token=newhost['submit_token']).first()
+  if not thisuser:
+    return "invalid submit token: '"+newhost['submit_token']+"'"
+
+  newhost['user']=thisuser.user
+  thisuser.pointsEarned=thisuser.pointsEarned+1
+  db.session.commit()
 
   try:
     newhost['ip'] = get_ip(newhost['nmap_data'])
@@ -115,8 +129,18 @@ def submit():
     return "[!] More than 500 ports found. This is probably an IDS/IPS. We're going to throw the data out."
 
   nweb.newhost(newhost)
+  return str(newhost)
+  #return "[+] nmap successful and submitted for ip: "+newhost['ip']+"\nhostname: "+newhost['hostname']+"\nports: "+newhost['ports']
 
-  return "[+] nmap successful and submitted for ip: "+newhost['ip']+"\nhostname: "+newhost['hostname']+"\nports: "+newhost['ports']
+@app.route('/leaderboard')
+#@jwt_required
+def leaderboard():
+  theleaders = {}
+  for user in User.query.all(): # TODO maybe limit by date at some point?
+    theleaders[user.user]=user.pointsEarned
+
+  return render_template("leaderboard.html",leaders=theleaders)
+
 
 # Metamask stuff
 
@@ -154,13 +178,13 @@ def login():
 
       submit_token=""
       try:
-        thisuser = User.query.filter_by(username=current_user).first()
+        thisuser = User.query.filter_by(user=current_user).first()
       except:
         thisuser = None
 
       if not thisuser:
         newuser = User()
-        newuser.username = current_user
+        newuser.user = current_user
         newuser.submit_token = ''.join(random.choice(string.ascii_lowercase) for i in range(22))
         submit_token = newuser.submit_token
         db.session.add(newuser)
