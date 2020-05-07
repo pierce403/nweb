@@ -9,7 +9,7 @@ def search(query,limit,offset):
     query='nmap'
 
   try:
-    result = es.search(index="nmap", doc_type="_doc", body={"size":limit, "from":offset, "query": {"query_string": { 'query':query, "fields":["nmap_data"], "default_operator":"AND"  } },"sort": { "ctime": { "order": "desc" }}})
+    result = es.search(index="nweb_hosts", doc_type="_doc", body={"size":limit, "from":offset, "query": {"query_string": { 'query':query, "fields":["nmap_data"], "default_operator":"AND"  } },"sort": { "ctime": { "order": "desc" }}})
   except:
     return 0,[] # search borked, return nothing
 
@@ -26,28 +26,32 @@ def newhost(host):
   ip = str(host['ip'])
   # broken in ES6
   es.index(index='nmap_history', doc_type='_doc', body=host)
-  es.index(index='nmap', doc_type='_doc', id=ip, body=host)
+  es.index(index='nweb_hosts', doc_type='_doc', id=ip, body=host)
 
 def gethost(ip):
-  result = es.get(index='nmap', doc_type='_doc', id=ip)
+  result = es.get(index='nweb_hosts', doc_type='_doc', id=ip)
   return result['_source']
 
-# getwork when masscan data is loaded
 def getwork_elastic():
+  result_count = 0
+  while result_count < 1:
+    rand_subnet = str(random.randint(0, 255)) + '.' + str(random.randint(0, 255)) + '.0.0/16'
+    print('[+] trying ' + rand_subnet)
+    result = es.search(index='nweb_hosts', doc_type='_doc', body={'size':1000,  'query':{'term': {'ip': rand_subnet}},  'sort':{'timestamp': {'order': 'asc'}}})
+    result_count = len(result['hits']['hits'])
 
-  # get random ip
-  result = es.search(index="masscan_hosts", doc_type="_doc", body={"size": 1,"query": {"function_score": {"functions": [{"random_score": {"seed": random.randint(0,2**60)}}]}}})
-  randip = str(result['hits']['hits'][0]['_source']['ip'])
-
-  # get ports
-  result = es.search(index="masscan_services", doc_type="_doc", body={"size": 1000,"query": {"match": {'ip':randip}}})
-  ports=[] # collate results
+  randip = str(result['hits']['hits'][random.randint(0, result_count)]['_source']['ip'])
+  print('[+] Got the random IP! ' + str(randip))
+  result = es.search(index='masscan_services', doc_type='_doc', body={'size':1000,  'query':{'match': {'ip': randip}}})
+  ports = []
   for thing in result['hits']['hits']:
-    ports.append(thing['_source']['ports'][0]['port'])
+    port = int(thing['_source']['port'])
+    if port not in ports:
+      ports.append(port)
 
+  ports.sort()
   work = {}
-  work['type']='nmap'
-  work['target']=randip
-  work['ports']=ports
+  work['type'] = 'nmap'
+  work['target'] = randip
+  work['ports'] = ports
   return json.dumps(work)
-
