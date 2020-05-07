@@ -92,9 +92,10 @@ def search():
 def getwork():
   try:
     # masscan data required
-    return nweb.getwork_elastic()
+    return str(nweb.getwork_elastic())
   except:
     print("[+] Masscan data not found.")
+    return "ERROR"
 
 @app.route('/submit',methods=['POST'])
 def submit():
