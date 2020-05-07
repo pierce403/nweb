@@ -7,18 +7,14 @@ host_index = "nweb_hosts"
 history_index = "nmap_history"
 services_index = "masscan_services"
 
-def search(query,limit,offset):
-
-  if query=='':
-    query='nmap'
-
+def search(query, limit, offset):
+  if query == '':
+    query = 'nmap'
   try:
-    result = es.search(index=host_index, doc_type="_doc", body={"size":limit, "from":offset, "query": {"query_string": { 'query':query, "fields":["nmap_data"], "default_operator":"AND"  } },"sort": { "ctime": { "order": "desc" }}})
-  except:
-    return 0,[] # search borked, return nothing
-
-  #result = es.search(index="nmap", doc_type="_doc", body={"size":limit, "from":offset, "query": {"match": {'nmap_data':query}}})
-  count = 1
+    result = es.search(index=host_index, doc_type='_doc', body={'size':limit,  'from':offset, 'track_total_hits':True, 'query':{'query_string': {'query':query,  'fields':['nmap_data'],  'default_operator':'AND'}},  'sort':{'timestamp': {'order': 'desc'}}})
+  except Exception as e:
+    print('[E] ' + str(e))
+    return 0, []
 
   results=[] # collate results
   for thing in result['hits']['hits']:
