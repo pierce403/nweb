@@ -1,0 +1,16 @@
+<html>
+<body bgcolor="black" text="white" link="white" alink="white" vlink="white">
+
+<center>
+<br><big>Leaderboard</big><br><br>
+
+<table>
+<tr><th>User</th><th>Points</th></tr>
+{% for key, value in leaders|dictsort('value') %}
+<tr><td>{{key}}</td><td align="right">{{value}}</td></tr>
+{% endfor %}
+</table>
+</center>
+
+</body>
+</html>
