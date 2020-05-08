@@ -213,6 +213,7 @@ def login():
     original_message = 'Signing in to {} at {}'.format(domain,sortanow)
     print("[+] checking: "+original_message)
     message_hash = defunct_hash_message(text=original_message)
+    print("[I] w3 is "+str(w3))
     signer = w3.eth.account.recoverHash(message_hash, signature=signature)
     print("[+] fascinating")
 
