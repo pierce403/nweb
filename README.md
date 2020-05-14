@@ -58,3 +58,42 @@ curl localhost:9200/_cat/indices?v
 curl -XDELETE localhost:9200/masscan_services
 curl -XDELETE localhost:9200/masscan_hosts
 ```
+
+
+Mining Scantoken
+----------------
+
+Users who contribute nmap scan data to nmap have the opportunity to earn Global Scan Tokens, described here: scantoken.org
+
+Step 1:
+
+Go to https://nweb.io/login, log in with Metamask, and get your *submit token*
+
+Step 2:
+
+`git clone https://github.com/pierce403/nweb.git`
+
+Step 3:
+
+    cd nweb/nweb-agent
+    ./setup-agent.sh
+
+Step 4:
+
+Edit the config.py to point to the right server, and set an appropriate number of threads.
+$ cat config.py 
+
+```
+class Config:
+    def __init__(self):
+        self.server = 'https://nweb.io/'
+        self.max_threads = 16
+        self.timeout = 360
+```
+Step 5:
+
+    ./nweb_agent.py <submit token>
+    
+Step 6:
+
+Check out https://nweb.io/leaderboard to see if you're on the leaderboard.
