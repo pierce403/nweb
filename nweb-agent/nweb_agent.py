@@ -41,7 +41,7 @@ def scan(submit_token):
   rand = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(10))
   print("[+] Scan ID: "+rand)
 
-  command = ["nmap","-oA","data/nweb."+rand,"-sC","-sV","-open",target]
+  command = ["nmap","-oA","data/nweb."+rand,"-sC","-sV","--open","-Pn","--system-dns",target]
 
   if 'ports' in target_data:
     command.append('-p')
@@ -66,8 +66,9 @@ def scan(submit_token):
     os.remove("data/nweb."+rand+"."+ext)
     print("[+] (%s) Cleaning up: nweb.%s.%s" % (rand, rand, ext))
 
-  if len(result['nmap_data']) < 250:
+  if len(result['nmap_data']) < 200:
     print("[!] (%s) Nmap data is too short" % rand)
+    print("[+] (%s) scan size: %s" % (rand, len(result['nmap_data'])))
     return
   else:
     print("[+] (%s) scan size: %s" % (rand, len(result['nmap_data'])))
