@@ -123,13 +123,15 @@ def submit():
 
   try:
     print("[+] nmap successful and submitted for ip: "+newhost['ip']+"\nhostname: "+newhost['hostname']+"\nports: "+newhost['ports'])    
-    nweb.newhost(newhost)
     thisuser = User.query.filter_by(submit_token=newhost['submit_token']).first()
     if not thisuser:
       return "invalid submit token: '"+newhost['submit_token']+"'"
     newhost['user']=thisuser.user
     thisuser.pointsEarned=thisuser.pointsEarned+1
     db.session.commit()
+    del newhost['submit_token'] # make sure not to leak the submit tokens (anymore)
+
+    nweb.newhost(newhost)
 
   except:
     return "[-] bad submission data"
