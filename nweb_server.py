@@ -107,19 +107,11 @@ def submit():
   if 'submit_token' not in newhost:
     return "no submit token supplied"
 
-  thisuser = User.query.filter_by(submit_token=newhost['submit_token']).first()
-  if not thisuser:
-    return "invalid submit token: '"+newhost['submit_token']+"'"
-
-  newhost['user']=thisuser.user
-  thisuser.pointsEarned=thisuser.pointsEarned+1
-  db.session.commit()
-
   try:
     newhost['ip'] = get_ip(newhost['nmap_data'])
     newhost['hostname'] = get_hostname(newhost['nmap_data'])
     newhost['ports'] = str(get_ports(newhost['nmap_data']))
-    newhost['ctime'] = datetime.now()
+    newhost['timestamp'] = datetime.now()
   except Exception as e:
     return "[!] Couldn't find necessary data: "+str(e)
 
@@ -129,9 +121,21 @@ def submit():
   if len(newhost['ports']) > 500:
     return "[!] More than 500 ports found. This is probably an IDS/IPS. We're going to throw the data out."
 
-  nweb.newhost(newhost)
-  return str(newhost)
-  #return "[+] nmap successful and submitted for ip: "+newhost['ip']+"\nhostname: "+newhost['hostname']+"\nports: "+newhost['ports']
+  try:
+    print("[+] nmap successful and submitted for ip: "+newhost['ip']+"\nhostname: "+newhost['hostname']+"\nports: "+newhost['ports'])    
+    nweb.newhost(newhost)
+    thisuser = User.query.filter_by(submit_token=newhost['submit_token']).first()
+    if not thisuser:
+      return "invalid submit token: '"+newhost['submit_token']+"'"
+    newhost['user']=thisuser.user
+    thisuser.pointsEarned=thisuser.pointsEarned+1
+    db.session.commit()
+
+  except:
+    return "[-] bad submission data"
+
+  #return str(newhost)
+  return "[+] nmap successful and submitted for ip: "+newhost['ip']+"\nhostname: "+newhost['hostname']+"\nports: "+newhost['ports']
 
 @app.route('/leaderboard')
 #@jwt_required
