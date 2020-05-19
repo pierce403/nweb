@@ -17,7 +17,7 @@ def getheadshot(ip,rand, service):
     process = subprocess.Popen(["vncsnapshot","-quality","50",ip,"data/nweb."+rand+ "." + service + ".headshot.jpg"], stdout=FNULL, stderr=FNULL)
     try:
       out, err = process.communicate(timeout=60)
-      if process.returncode is 0:
+      if process.returncode == 0:
         return True
     except:
       try:
@@ -29,9 +29,10 @@ def getheadshot(ip,rand, service):
   if service in ("http", "https"):
     print("[+] (%s) Attempting to take %s snapshot" % (rand, service))
     process = subprocess.Popen(["wkhtmltoimage","--javascript-delay","3000","--width","800","--height","600","--quality","80","-f","jpg",service+"://"+ip,"data/nweb."+rand+"." + service + ".headshot.jpg"], stdout=FNULL, stderr=FNULL)
+
     try:
       out, err = process.communicate(timeout=60)
-      if process.returncode is 0:
+      if process.returncode == 0:
         return True
     except:
       try:
