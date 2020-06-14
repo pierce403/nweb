@@ -9,6 +9,7 @@ import random
 import string
 import json
 import base64
+import shutil
 
 import threading
 import multiprocessing
@@ -63,7 +64,7 @@ def scan(submit_token):
   result={}
   for ext in 'nmap','gnmap','xml':
     result[ext+"_data"]=open("data/nweb."+rand+"."+ext).read()
-    os.remove("data/nweb."+rand+"."+ext)
+    shutil.move("data/nweb."+rand+"."+ext, "data/bad/nweb."+rand+"."+ext)
     print("[+] (%s) Cleaning up: nweb.%s.%s" % (rand, rand, ext))
 
   if len(result['nmap_data']) < 200:
