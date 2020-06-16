@@ -64,12 +64,13 @@ def scan(submit_token):
   result={}
   for ext in 'nmap','gnmap','xml':
     result[ext+"_data"]=open("data/nweb."+rand+"."+ext).read()
-    shutil.move("data/nweb."+rand+"."+ext, "data/bad/nweb."+rand+"."+ext)
+    os.remove("data/nweb."+rand+"."+ext)
     print("[+] (%s) Cleaning up: nweb.%s.%s" % (rand, rand, ext))
 
   if len(result['nmap_data']) < 200:
     print("[!] (%s) Nmap data is too short" % rand)
     print("[+] (%s) scan size: %s" % (rand, len(result['nmap_data'])))
+    shutil.move("data/nweb."+rand+"."+ext, "data/bad/nweb."+rand+"."+ext)
     return
   else:
     print("[+] (%s) scan size: %s" % (rand, len(result['nmap_data'])))
