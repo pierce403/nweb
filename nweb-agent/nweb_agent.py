@@ -64,9 +64,6 @@ def scan(submit_token):
   result={}
   for ext in 'nmap','gnmap','xml':
     result[ext+"_data"]=open("data/nweb."+rand+"."+ext).read()
-    os.remove("data/nweb."+rand+"."+ext)
-    print("[+] (%s) Cleaning up: nweb.%s.%s" % (rand, rand, ext))
-
   if len(result['nmap_data']) < 200:
     print("[!] (%s) Nmap data is too short" % rand)
     print("[+] (%s) scan size: %s" % (rand, len(result['nmap_data'])))
@@ -74,6 +71,8 @@ def scan(submit_token):
     return
   else:
     print("[+] (%s) scan size: %s" % (rand, len(result['nmap_data'])))
+    os.remove("data/nweb."+rand+"."+ext)	
+    print("[+] (%s) Cleaning up: nweb.%s.%s" % (rand, rand, ext))
 
   if "80/tcp" in result['nmap_data']:
     if getheadshot(target,rand, 'http') is True:
