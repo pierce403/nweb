@@ -28,7 +28,8 @@ def search(query, limit, offset):
   for thing in result['hits']['hits']:
     results.append(thing['_source'])
 
-  return result['hits']['total'],results
+  return 0,results
+  #return result['hits']['total'],results
 
 def newhost(host):
   ip = str(host['ip'])

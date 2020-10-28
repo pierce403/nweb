@@ -6,7 +6,7 @@
 
 <table>
 <tr><th>User</th><th>Points</th></tr>
-{% for key, value in leaders|dictsort('value') %}
+{% for key, value in leaders|dictsort(by='value',reverse=true) %}
 <tr><td>{{key}}</td><td align="right">{{value}}</td></tr>
 {% endfor %}
 </table>
@@ -14,3 +14,4 @@
 
 </body>
 </html>
+
