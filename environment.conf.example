@@ -1,3 +1,3 @@
 export DEBUG=True
 export ELASTIC='http://localhost:9200'
-export DBURI='sqlite:///users.db'
+export DATABASE_URL='sqlite:///users.db'

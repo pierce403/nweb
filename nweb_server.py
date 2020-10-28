@@ -170,22 +170,7 @@ def login():
       if not current_user:
         return render_template("login.html", user="None")
 
-      submit_token=""
-      try:
-        thisuser = User.query.filter_by(user=current_user).first()
-      except:
-        thisuser = None
-
-      if not thisuser:
-        newuser = User()
-        newuser.user = current_user
-        newuser.submit_token = ''.join(random.choice(string.ascii_lowercase) for i in range(22))
-        submit_token = newuser.submit_token
-        db.session.add(newuser)
-        db.session.commit()
-      else:
-        submit_token = thisuser.submit_token
-
+      submit_token = leaderboard.get_token(current_user)
       return render_template("login.html", user=str(current_user),submit_token=submit_token)
 
     print("[+] creating session")

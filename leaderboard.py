@@ -14,7 +14,7 @@ class User(db.Model):
 def setup(app):
   print('!!! SETTING UP THE APP')
   try:
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DBURI']
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
   except Exception as e:
     print("[-] DBURI invalid "+str(e))
 
@@ -37,4 +37,26 @@ def get_leaders():
     theleaders[user.user]=user.pointsEarned
 
   return theleaders
+
+def get_token(user)
+
+  submit_token=""
+
+  try:
+    thisuser = User.query.filter_by(user=current_user).first()
+  except:
+    thisuser = None
+
+  if not thisuser:
+    newuser = User()
+    newuser.user = current_user
+    newuser.submit_token = ''.join(random.choice(string.ascii_lowercase) for i in range(22))
+    submit_token = newuser.submit_token
+    db.session.add(newuser)
+    db.session.commit()
+  else:
+    submit_token = thisuser.submit_token
+
+  return submit_token
+
 
