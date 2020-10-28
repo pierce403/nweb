@@ -5,3 +5,9 @@ flask-sqlalchemy
 flask_jwt_extended
 web3
 werkzeug
+
+mock
+gevent
+gunicorn
+flask_sslify
+
