@@ -1,11 +1,14 @@
 import json
 from elasticsearch import Elasticsearch
 import random
+import os
 
 try:
   es = Elasticsearch(os.environ['ELASTIC'])
-except:
+  print("[+] connecting to "+os.environ['ELASTIC'])
+except Exception as e:
   es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
+  print("[-] elastic falling back to localhost "+str(e))
 
 host_index = "nweb_hosts"
 history_index = "nmap_history"

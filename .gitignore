@@ -5,4 +5,4 @@ start.log
 nweb.db
 data/
 nweb-agent/config.py
-
+environment.conf
