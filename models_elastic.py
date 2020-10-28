@@ -19,7 +19,7 @@ def search(query, limit, offset):
     query = 'nmap'
   try:
     #result = es.search(index=host_index, doc_type='_doc', body={'size':limit, 'from':offset, 'query':{'query_string': {'query':query,  'fields':['nmap_data'],  'default_operator':'AND'}},  'sort':{'timestamp': {'order': 'desc'}}})
-    result = es.search(index=host_index, body={'size':limit, 'from':offset, 'track_total_hits':True, 'query':{'query_string': {'query':query, 'default_operator':'AND'}},  'sort':{'timestamp': {'order': 'desc'}}})
+    result = es.search(index=host_index, body={'size':limit, 'from':offset, 'track_total_hits':False, 'query':{'query_string': {'query':query, 'default_operator':'AND'}},  'sort':{'timestamp': {'order': 'desc'}}})
   except Exception as e:
     print('[E] ' + str(e))
     return 0, []

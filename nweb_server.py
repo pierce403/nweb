@@ -70,7 +70,7 @@ def search():
   page = int(request.args.get('p', 1))
   format = request.args.get('f', "")
 
-  results_per_page = 100 # TODO maybe tweak as a premium feature?
+  results_per_page = 20 # TODO maybe tweak as a premium feature?
   searchOffset = results_per_page * (page-1)
   count,context = nweb.search(query,results_per_page,searchOffset)
   
