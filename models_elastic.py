@@ -1,7 +1,11 @@
 import json
 from elasticsearch import Elasticsearch
-es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 import random
+
+try:
+  es = Elasticsearch(os.environ['ELASTIC'])
+except:
+  es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 
 host_index = "nweb_hosts"
 history_index = "nmap_history"
