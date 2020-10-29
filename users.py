@@ -28,7 +28,7 @@ def init():
 def bump_user(submit_token):
   print("!!! SUBMITTING TOKEN "+submit_token)
   try: 
-    thisuser = Users.query.get(submit_token=submit_token)
+    thisuser = Users.query.filter_by(submit_token=submit_token).first()
   except Exception as e:
     print("!!! WOAH "+str(e))
   print("!!! DID A THING "+submit_token)
@@ -38,10 +38,11 @@ def bump_user(submit_token):
   print("!!! SEEMS LIKE A USER "+str(submit_token))
   print("!!! HELLO "+str(thisuser.address))
   thisuser.points_earned=thisuser.points_earned+1
-  db.session.commit()
+  #db.session.commit()
   return thisuser.address
 
 def get_leaders():
+  db.session.commit()
   theleaders = {}
   for user in Users.query.all(): # TODO maybe limit by date at some point?
     theleaders[user.address]=user.points_earned
@@ -53,7 +54,7 @@ def get_token(user):
   submit_token=""
 
   try:
-    thisuser = Users.query.get(address=current_user)
+    thisuser = Users.query.filter_by(address=current_user).first()
   except Exception as e:
     print("!!! user lookup failed "+str(e))
     thisuser = None
@@ -64,7 +65,7 @@ def get_token(user):
     newuser.submit_token = ''.join(random.choice(string.ascii_lowercase) for i in range(22))
     submit_token = newuser.submit_token
     db.session.add(newuser)
-    db.session.commit()
+    #db.session.commit()
   else:
     submit_token = thisuser.submit_token
 
