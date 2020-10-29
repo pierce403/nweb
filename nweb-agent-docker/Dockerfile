@@ -21,11 +21,10 @@ WORKDIR /opt/nweb/nweb-agent
 RUN python3 -m compileall .
 
 FROM ubuntu:18.04
-#FROM alpine:3.7
 
 RUN export DEBIAN_FRONTEND=noninteractive \
 	&& apt-get update \
-	&& apt-get install --no-install-recommends -qy python3 python3-pkg-resources vncsnapshot wkhtmltopdf nmap
+	&& apt-get install --no-install-recommends -qy python3 python3-pkg-resources vncsnapshot wkhtmltopdf nmap vim
 
 COPY --from=build /opt/nweb/nweb-agent /opt/nweb/nweb-agent
 COPY --from=build /.venv/lib/python3.6/site-packages /usr/local/lib/python3.6/dist-packages

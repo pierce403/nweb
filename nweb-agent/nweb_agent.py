@@ -9,7 +9,6 @@ import random
 import string
 import json
 import base64
-import shutil
 
 import threading
 import multiprocessing
@@ -28,7 +27,7 @@ except:
 
 config = Config()
 
-submit_token="none" # oveerridden by argv
+submit_token=config.submit_token # provided through agent_env file
 
 def scan(submit_token):
   server=config.server
@@ -66,10 +65,10 @@ def scan(submit_token):
     result[ext+"_data"]=open("data/nweb."+rand+"."+ext).read()
     os.remove("data/nweb."+rand+"."+ext)
     print("[+] (%s) Cleaning up: nweb.%s.%s" % (rand, rand, ext))
+
   if len(result['nmap_data']) < 200:
     print("[!] (%s) Nmap data is too short" % rand)
     print("[+] (%s) scan size: %s" % (rand, len(result['nmap_data'])))
-    shutil.move("data/nweb."+rand+"."+ext, "data/bad/nweb."+rand+"."+ext)
     return
   else:
     print("[+] (%s) scan size: %s" % (rand, len(result['nmap_data'])))
@@ -98,11 +97,7 @@ def scan(submit_token):
 
 def main():
 
-  if len(argv)!=2:
-    exit("usage: nweb_agent.py <submit_token>")
-  
-  print(argv[1]) 
-  submit_token = argv[1] # pull in import source
+  submit_token = config.submit_token 
 
   if not os.path.isdir("data"):
     os.mkdir("data")
