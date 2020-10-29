@@ -1,16 +1,37 @@
-# Edit agent_env to include your nweb.io submit_token
+nweb agent
+===========
 
-# Build/run Docker nweb-agent image
+Edit agent_env to include your nweb.io submit_token
 
+```
+submit_token=REPLACE_ME
+```
+
+Building NWeb-agent Docker image
+------------------------
+
+```
 sudo docker build -t nweb-agent .
+```
 
+Running NWeb-agent Docker
+
+```
 sudo docker run --env-file agent_env -it nweb-agent
+```
 
-# To access the /bin/bash in the nweb-agent image run this dokcer command instead
+To access the /bin/bash in the nweb-agent image run this dokcer command instead
+
+```
 sudo docker run --env-file agent_env -it --entrypoint /bin/bash nweb-agent
+```
 
-# List running docker containers and ID#
+List running docker containers and ID#
+```
 sudo docker ps
+```
 
-# How to Kill run away agent containers
+How to Kill run away agent containers
+```
 sudo docker kill CONTAINER_ID
+```
