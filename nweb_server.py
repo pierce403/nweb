@@ -35,14 +35,14 @@ app.config['JWT_COOKIE_CSRF_PROTECT'] = True
 app.config['JWT_CSRF_CHECK_FORM'] = True
 jwt = JWTManager(app)
 
-import leaderboard
-leaderboard.setup(app)
+import users
+users.setup(app)
 
 @app.before_first_request
 def setup():
   print("[+] running setup")
   try:
-    leaderboard.init()
+    users.init()
     print("[+] created users db")
   except:
     print("[+] users db already exists")
@@ -119,7 +119,7 @@ def submit():
   try:
     print("[+] nmap successful and submitted for ip: "+newhost['ip']+"\nhostname: "+newhost['hostname']+"\nports: "+newhost['ports'])    
 
-    newhost['user']=leaderboard.bump_user(newhost['submit_token'])
+    newhost['user']=users.bump_user(newhost['submit_token'])
     del newhost['submit_token'] # make sure not to leak the submit tokens (anymore)
 
     nweb.newhost(newhost)
@@ -134,7 +134,7 @@ def submit():
 #@jwt_required
 def nweb_leaderboard():
   try:
-    theleaders = leaderboard.get_leaders()
+    theleaders = users.get_leaders()
   except Exception as e:
     return "SERVER DEAD"
   return render_template("leaderboard.html",leaders=theleaders)
@@ -173,7 +173,7 @@ def login():
       if not current_user:
         return render_template("login.html", user="None")
 
-      submit_token = leaderboard.get_token(current_user)
+      submit_token = users.get_token(current_user)
       return render_template("login.html", user=str(current_user),submit_token=submit_token)
 
     print("[+] creating session")
