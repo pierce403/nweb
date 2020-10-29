@@ -1,4 +1,4 @@
-# Edit agent_env to include you nweb.io submit_token
+# Edit agent_env to include your nweb.io submit_token
 # Build/run Docker nweb-agent image
 sudo docker build -t nweb-agent .
 sudo docker run --env-file agent_env -it nweb-agent
