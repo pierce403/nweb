@@ -14,7 +14,7 @@ Building NWeb-agent Docker image
 sudo docker build -t nweb-agent .
 ```
 
-Running NWeb-agent Docker
+Running NWeb-agent Docker image
 
 ```
 sudo docker run --env-file agent_env -it nweb-agent
