@@ -24,12 +24,20 @@ def init():
   db.create_all()
 
 def bump_user(submit_token):
-  thisuser = Users.query.filter_by(submit_token=newhost['submit_token']).first()
+  print("!!! SUBMITTING TOKEN "+submit_token)
+  try: 
+    thisuser = Users.query.filter_by(submit_token=submit_token).first()
+  except Exception as e:
+    print("!!! WOAH "+str(e))
+  print("!!! DID A THING "+submit_token)
   if not thisuser:
+    print("!!! INVALID SUBMIT TOKEN "+submit_token)
     return "invalid submit token: '"+newhost['submit_token']+"'"
-  newhost['user']=thisuser.address
+  print("!!! SEEMS LIKE A USER "+str(submit_token))
+  print("!!! HELLO "+str(thisuser.address))
   thisuser.points_earned=thisuser.points_earned+1
   db.session.commit()
+  return thisuser.address
 
 def get_leaders():
   theleaders = {}

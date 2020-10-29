@@ -96,6 +96,7 @@ def submit():
 
   data = request.get_json()
 
+  print("!!! SUBMITING DATA")
   newhost={}
   newhost=json.loads(data)
   if 'submit_token' not in newhost:
@@ -118,8 +119,7 @@ def submit():
   try:
     print("[+] nmap successful and submitted for ip: "+newhost['ip']+"\nhostname: "+newhost['hostname']+"\nports: "+newhost['ports'])    
 
-    leaderboard.bump_user(newhost['submit_token'])
-
+    newhost['user']=leaderboard.bump_user(newhost['submit_token'])
     del newhost['submit_token'] # make sure not to leak the submit tokens (anymore)
 
     nweb.newhost(newhost)
@@ -133,7 +133,10 @@ def submit():
 @app.route('/leaderboard')
 #@jwt_required
 def nweb_leaderboard():
-  theleaders = leaderboard.get_leaders()
+  try:
+    theleaders = leaderboard.get_leaders()
+  except Exception as e:
+    return "SERVER DEAD"
   return render_template("leaderboard.html",leaders=theleaders)
 
 # Metamask stuff
