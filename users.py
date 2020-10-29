@@ -28,7 +28,7 @@ def init():
 def bump_user(submit_token):
   print("!!! SUBMITTING TOKEN "+submit_token)
   try: 
-    thisuser = Users.query.filter_by(submit_token=submit_token).first()
+    thisuser = Users.query.get(submit_token=submit_token)
   except Exception as e:
     print("!!! WOAH "+str(e))
   print("!!! DID A THING "+submit_token)
@@ -53,8 +53,9 @@ def get_token(user):
   submit_token=""
 
   try:
-    thisuser = Users.query.filter_by(address=current_user).first()
-  except:
+    thisuser = Users.query.get(address=current_user)
+  except Exception as e:
+    print("!!! user lookup failed "+str(e))
     thisuser = None
 
   if not thisuser:
