@@ -4,8 +4,8 @@ import os
 
 db=SQLAlchemy()
 
-class User(db.Model):
-  user = db.Column(db.String(80), primary_key=True, unique=True)
+class Users(db.Model):
+  address = db.Column(db.String(80), primary_key=True, unique=True)
   submit_token = db.Column(db.String(80))
   pointsEarned = db.Column(Integer, default=0)
   pointsRewarded = db.Column(Integer, default=0)
@@ -24,32 +24,32 @@ def init():
   db.create_all()
 
 def bump_user(submit_token):
-  thisuser = User.query.filter_by(submit_token=newhost['submit_token']).first()
+  thisuser = Users.query.filter_by(submit_token=newhost['submit_token']).first()
   if not thisuser:
     return "invalid submit token: '"+newhost['submit_token']+"'"
-  newhost['user']=thisuser.user
+  newhost['user']=thisuser.address
   thisuser.pointsEarned=thisuser.pointsEarned+1
   db.session.commit()
 
 def get_leaders():
   theleaders = {}
-  for user in User.query.all(): # TODO maybe limit by date at some point?
-    theleaders[user.user]=user.pointsEarned
+  for user in Users.query.all(): # TODO maybe limit by date at some point?
+    theleaders[user.address]=user.pointsEarned
 
   return theleaders
 
-def get_token(user)
+def get_token(user):
 
   submit_token=""
 
   try:
-    thisuser = User.query.filter_by(user=current_user).first()
+    thisuser = Users.query.filter_by(address=current_user).first()
   except:
     thisuser = None
 
   if not thisuser:
-    newuser = User()
-    newuser.user = current_user
+    newuser = Users()
+    newuser.address = current_user
     newuser.submit_token = ''.join(random.choice(string.ascii_lowercase) for i in range(22))
     submit_token = newuser.submit_token
     db.session.add(newuser)
