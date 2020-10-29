@@ -7,8 +7,8 @@ db=SQLAlchemy()
 class Users(db.Model):
   address = db.Column(db.String(80), primary_key=True, unique=True)
   submit_token = db.Column(db.String(80))
-  pointsEarned = db.Column(Integer, default=0)
-  pointsRewarded = db.Column(Integer, default=0)
+  points_earned = db.Column(Integer, default=0)
+  points_rewarded = db.Column(Integer, default=0)
   ctime = db.Column(DateTime, default=func.now())
 
 def setup(app):
@@ -28,13 +28,13 @@ def bump_user(submit_token):
   if not thisuser:
     return "invalid submit token: '"+newhost['submit_token']+"'"
   newhost['user']=thisuser.address
-  thisuser.pointsEarned=thisuser.pointsEarned+1
+  thisuser.points_earned=thisuser.points_earned+1
   db.session.commit()
 
 def get_leaders():
   theleaders = {}
   for user in Users.query.all(): # TODO maybe limit by date at some point?
-    theleaders[user.address]=user.pointsEarned
+    theleaders[user.address]=user.points_earned
 
   return theleaders
 
