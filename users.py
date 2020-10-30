@@ -16,7 +16,7 @@ def setup(app):
   try:
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['HEROKU_POSTGRESQL_COBALT_URL']
     app.config['SQLALCHEMY_POOL_SIZE'] = 3
-    app.config['SQLALCHEMY_MAX_OVERFLOW'] = 12
+    app.config['SQLALCHEMY_MAX_OVERFLOW'] = 6
     #app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
   except Exception as e:
     print("[-] DBURI invalid "+str(e))
