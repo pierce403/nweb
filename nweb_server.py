@@ -38,6 +38,10 @@ jwt = JWTManager(app)
 import users
 users.setup(app)
 
+@app.teardown_request
+def shutdown_session(exception=None):
+  users.db.session.remove()
+
 @app.teardown_appcontext
 def shutdown_session(exception=None):
   users.db.session.remove()
