@@ -1,5 +1,5 @@
 import flask
-from flask_talisman import Talisman
+from flask_talisman import Talisman, DEFAULT_CSP_POLICY
 from flask import render_template, redirect, request, Flask, g, send_from_directory, abort, jsonify, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Table, Column, Float, Integer, String, DateTime, MetaData, ForeignKey, func
@@ -22,7 +22,7 @@ from nmap_helper import * # get_ip etc
 from datetime import datetime
 
 app = Flask(__name__,static_url_path='/static')
-Talisman(app)
+Talisman(app,content_security_policy=os.environ.get("CSP_DIRECTIVES", DEFAULT_CSP_POLICY))
 app.jinja_env.add_extension('jinja2.ext.do')
 
 # Setup the Flask-JWT-Extended extension
