@@ -1,6 +1,6 @@
 flask
 elasticsearch
-flask
+flask-talisman
 flask-sqlalchemy
 flask_jwt_extended
 web3
