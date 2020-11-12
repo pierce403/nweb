@@ -3,5 +3,4 @@ venv
 __pycache__
 start.log
 nweb.db
-data/
 environment.conf
