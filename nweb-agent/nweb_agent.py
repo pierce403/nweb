@@ -27,7 +27,7 @@ except:
 
 config = Config()
 
-submit_token="none" # oveerridden by argv
+submit_token=config.submit_token # provided through agent_env file
 
 def scan(submit_token):
   server=config.server
@@ -97,11 +97,7 @@ def scan(submit_token):
 
 def main():
 
-  if len(argv)!=2:
-    exit("usage: nweb_agent.py <submit_token>")
-  
-  print(argv[1]) 
-  submit_token = argv[1] # pull in import source
+  submit_token = config.submit_token 
 
   if not os.path.isdir("data"):
     os.mkdir("data")
