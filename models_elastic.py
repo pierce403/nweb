@@ -1,7 +1,14 @@
 import json
 from elasticsearch import Elasticsearch
-es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 import random
+import os
+
+try:
+  es = Elasticsearch(os.environ['ELASTIC'])
+  print("[+] connecting to "+os.environ['ELASTIC'])
+except Exception as e:
+  es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
+  print("[-] elastic falling back to localhost "+str(e))
 
 host_index = "nweb_hosts"
 history_index = "nmap_history"
@@ -12,7 +19,7 @@ def search(query, limit, offset):
     query = 'nmap'
   try:
     #result = es.search(index=host_index, doc_type='_doc', body={'size':limit, 'from':offset, 'query':{'query_string': {'query':query,  'fields':['nmap_data'],  'default_operator':'AND'}},  'sort':{'timestamp': {'order': 'desc'}}})
-    result = es.search(index=host_index, body={'size':limit, 'from':offset, 'track_total_hits':True, 'query':{'query_string': {'query':query, 'default_operator':'AND'}},  'sort':{'timestamp': {'order': 'desc'}}})
+    result = es.search(index=host_index, body={'size':limit, 'from':offset, 'track_total_hits':False, 'query':{'query_string': {'query':query, 'default_operator':'AND'}},  'sort':{'timestamp': {'order': 'desc'}}})
   except Exception as e:
     print('[E] ' + str(e))
     return 0, []
@@ -21,7 +28,8 @@ def search(query, limit, offset):
   for thing in result['hits']['hits']:
     results.append(thing['_source'])
 
-  return result['hits']['total'],results
+  return 0,results
+  #return result['hits']['total'],results
 
 def newhost(host):
   ip = str(host['ip'])

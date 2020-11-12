@@ -4,3 +4,4 @@ __pycache__
 start.log
 nweb.db
 data/
+environment.conf

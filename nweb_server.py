@@ -1,4 +1,5 @@
 import flask
+from flask_talisman import Talisman, DEFAULT_CSP_POLICY
 from flask import render_template, redirect, request, Flask, g, send_from_directory, abort, jsonify, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Table, Column, Float, Integer, String, DateTime, MetaData, ForeignKey, func
@@ -21,9 +22,8 @@ from nmap_helper import * # get_ip etc
 from datetime import datetime
 
 app = Flask(__name__,static_url_path='/static')
+Talisman(app,content_security_policy=os.environ.get("CSP_DIRECTIVES", DEFAULT_CSP_POLICY))
 app.jinja_env.add_extension('jinja2.ext.do')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
-db = SQLAlchemy(app)
 
 # Setup the Flask-JWT-Extended extension
 # log2(26^22) ~= 100 (pull at least 100 bits of entropy)
@@ -37,18 +37,22 @@ app.config['JWT_COOKIE_CSRF_PROTECT'] = True
 app.config['JWT_CSRF_CHECK_FORM'] = True
 jwt = JWTManager(app)
 
-class User(db.Model):
-  user = db.Column(db.String(80), primary_key=True, unique=True)
-  submit_token = db.Column(db.String(80))
-  pointsEarned = db.Column(Integer, default=0)
-  pointsRewarded = db.Column(Integer, default=0)
-  ctime = db.Column(DateTime, default=func.now())
+import users
+users.setup(app)
+
+@app.teardown_request
+def shutdown_session(exception=None):
+  users.db.session.remove()
+
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+  users.db.session.remove()
 
 @app.before_first_request
 def setup():
   print("[+] running setup")
   try:
-    db.create_all()
+    users.init()
     print("[+] created users db")
   except:
     print("[+] users db already exists")
@@ -70,7 +74,7 @@ def search():
   page = int(request.args.get('p', 1))
   format = request.args.get('f', "")
 
-  results_per_page = 100 # TODO maybe tweak as a premium feature?
+  results_per_page = 20 # TODO maybe tweak as a premium feature?
   searchOffset = results_per_page * (page-1)
   count,context = nweb.search(query,results_per_page,searchOffset)
   
@@ -102,6 +106,7 @@ def submit():
 
   data = request.get_json()
 
+  print("!!! SUBMITING DATA")
   newhost={}
   newhost=json.loads(data)
   if 'submit_token' not in newhost:
@@ -123,12 +128,8 @@ def submit():
 
   try:
     print("[+] nmap successful and submitted for ip: "+newhost['ip']+"\nhostname: "+newhost['hostname']+"\nports: "+newhost['ports'])    
-    thisuser = User.query.filter_by(submit_token=newhost['submit_token']).first()
-    if not thisuser:
-      return "invalid submit token: '"+newhost['submit_token']+"'"
-    newhost['user']=thisuser.user
-    thisuser.pointsEarned=thisuser.pointsEarned+1
-    db.session.commit()
+
+    newhost['user']=users.bump_user(newhost['submit_token'])
     del newhost['submit_token'] # make sure not to leak the submit tokens (anymore)
 
     nweb.newhost(newhost)
@@ -141,13 +142,12 @@ def submit():
 
 @app.route('/leaderboard')
 #@jwt_required
-def leaderboard():
-  theleaders = {}
-  for user in User.query.all(): # TODO maybe limit by date at some point?
-    theleaders[user.user]=user.pointsEarned
-
+def nweb_leaderboard():
+  try:
+    theleaders = users.get_leaders()
+  except Exception as e:
+    return "SERVER DEAD"
   return render_template("leaderboard.html",leaders=theleaders)
-
 
 # Metamask stuff
 
@@ -183,22 +183,7 @@ def login():
       if not current_user:
         return render_template("login.html", user="None")
 
-      submit_token=""
-      try:
-        thisuser = User.query.filter_by(user=current_user).first()
-      except:
-        thisuser = None
-
-      if not thisuser:
-        newuser = User()
-        newuser.user = current_user
-        newuser.submit_token = ''.join(random.choice(string.ascii_lowercase) for i in range(22))
-        submit_token = newuser.submit_token
-        db.session.add(newuser)
-        db.session.commit()
-      else:
-        submit_token = thisuser.submit_token
-
+      submit_token = users.get_token(current_user)
       return render_template("login.html", user=str(current_user),submit_token=submit_token)
 
     print("[+] creating session")

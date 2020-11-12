@@ -1,7 +1,14 @@
 flask
 elasticsearch
-flask
+flask-talisman
 flask-sqlalchemy
 flask_jwt_extended
 web3
 werkzeug
+psycopg2
+
+mock
+gevent
+gunicorn
+flask_sslify
+

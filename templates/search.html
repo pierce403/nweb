@@ -5,10 +5,10 @@
     {% include 'pagination.html' %}
 
     {% if query != '' %}
-      <h2 class="sub-header">{{numresults}} search results for '{{query}}'
+      <h2 class="sub-header">Search results for '{{query}}'
       <a href="?q={{query}}&p={{page}}&f=hostlist"> [hostlist]</a></h2>
     {% else %}
-      <h2 class="sub-header">{{numresults}} hosts scanned</h2>
+      <h2 class="sub-header"></h2>
     {% endif %}
     <div class="table-responsive">
       <table class="table table-striped">

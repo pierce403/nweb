@@ -4,7 +4,7 @@ export LC_ALL="C.UTF-8"
 export LANG="C.UTF-8"
 export FLASK_APP=./nweb_server.py
 
-source .env
+source environment.conf
 
 if [ ! -d venv ]
 then
