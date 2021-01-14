@@ -151,7 +151,7 @@ def nweb_leaderboard():
 
 @app.route('/authtest')
 @jwt_required
-def nweb_leaderboard():
+def authtest():
   try:
     current_user = get_jwt_identity()
     print("+++ CURRENT USER: "+current_user)
