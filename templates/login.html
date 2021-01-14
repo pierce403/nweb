@@ -18,10 +18,11 @@ Your submit token is {{submit_token}}
 <script src="static/metamask_login.js"></script>
 
 <script nonce="${nonce}">
-document.addEventListener('DOMContentLoaded', function () {
-  document.getElementById('login')
-          .addEventListener('click', login() );
-});
+console.log('adding onclick to login button');
+//document.addEventListener('DOMContentLoaded', function () {
+  document.getElementById('login').addEventListener('click', login() );
+//});
+</script>
 
 </body>
 </html>
