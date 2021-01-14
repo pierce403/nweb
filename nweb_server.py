@@ -149,6 +149,17 @@ def nweb_leaderboard():
     return "SERVER DEAD"
   return render_template("leaderboard.html",leaders=theleaders)
 
+@app.route('/authtest')
+@jwt_required
+def nweb_leaderboard():
+  try:
+    current_user = get_jwt_identity()
+    print("+++ CURRENT USER: "+current_user)
+  except Exception as e:
+    return "SERVER DEAD"
+  return ("HELLO "+current_user)
+
+
 # Metamask stuff
 
 # custom hook to ensure user gets logged out if jwt fails
