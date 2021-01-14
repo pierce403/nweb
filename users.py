@@ -49,7 +49,7 @@ def get_leaders():
 
   return theleaders
 
-def get_token(user):
+def get_token(current_user):
 
   submit_token=""
 
