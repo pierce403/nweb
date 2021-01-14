@@ -168,7 +168,7 @@ def authtest():
 def invalid_token_loader(msg):
   #resp = jsonify({'msg': msg})
   resp = redirect('/login', code=302)
-  print("[EE] TOKEN INVALID, DELETING COOKIES")
+  print("[EE] TOKEN INVALID, DELETING COOKIES "+str(msg))
   unset_jwt_cookies(resp) # this usually doesn't happen for some reason
   return resp
 
