@@ -176,6 +176,7 @@ def invalid_token_loader(msg):
 def expired_token_loader(msg):
   #resp = jsonify({'msg': 'Token has expired'})
   resp = redirect('/login', code=302)
+  print("[EE] TOKEN EXPIRED, DELETING COOKIES")
   unset_jwt_cookies(resp) # this usually doesn't happen for some reason
   return resp
 
