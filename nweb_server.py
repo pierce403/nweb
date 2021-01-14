@@ -27,7 +27,8 @@ app.jinja_env.add_extension('jinja2.ext.do')
 
 # Setup the Flask-JWT-Extended extension
 # log2(26^22) ~= 100 (pull at least 100 bits of entropy)
-app.config['JWT_SECRET_KEY'] = ''.join(random.choice(string.ascii_lowercase) for i in range(22))
+app.config['JWT_SECRET_KEY'] = os.environ.get("JWT_SECRET_KEY",''.join(random.choice(string.ascii_lowercase) for i in range(22)))
+
 #app.config['JWT_SECRET_KEY'] = '12345'
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
 if app.debug == False:
