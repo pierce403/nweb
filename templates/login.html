@@ -15,12 +15,16 @@ Welcome {{user}}!
   <pre>
   # check out the code
   git clone https://github.com/pierce403/nweb.git
+  
   # go into the agent directory
   cd nweb/nweb-agent
+  
   # attempt to apt install the tools for the agent
   ./setup-agent.sh
+  
   # put the submit token in the environment
   sed -i -e s/REPLACE_ME/{{submit_token}}/ agent_env
+  
   # run the agent (sometimes good to run in screen)
   ./nweb-agent.py 
   </pre>
