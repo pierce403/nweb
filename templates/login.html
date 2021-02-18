@@ -15,8 +15,9 @@ Welcome {{user}}!
   <pre>
   git clone https://github.com/pierce403/nweb.git
   cd nweb/nweb-agent
-  sed -i -e s/REPLACE_ME/{{submit_token}}/ agent_env
-  ./nweb-agent.py
+  ./setup-agent.sh # attempt to apt install the tools for the agent
+  sed -i -e s/REPLACE_ME/{{submit_token}}/ agent_env # put submit token in ENV
+  ./nweb-agent.py # run the agent (sometimes good to run in screen)
   </pre>
   </div>
 {% endif %}
