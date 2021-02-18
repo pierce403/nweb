@@ -9,7 +9,13 @@ Log in with <a href="https://metamask.io">Metamask</a>: <button onclick='login()
 {%else %}
 Welcome {{user}}!
 <br><br>
-Your submit token is {{submit_token}}
+  Your submit token is <b>{{submit_token}}</b><br><br>
+  <pre>
+  git clone https://github.com/pierce403/nweb.git
+  cd nweb/nweb-agent
+  sed -i -e s/REPLACE_ME/{{submit_token}}/ agent_env
+  ./nweb-agent.py
+  </pre>
 {% endif %}
 
 </center>
