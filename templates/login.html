@@ -10,12 +10,15 @@ Log in with <a href="https://metamask.io">Metamask</a>: <button onclick='login()
 Welcome {{user}}!
 <br><br>
   Your submit token is <b>{{submit_token}}</b><br><br>
+  
+  <div style="text-align: left; width: 400px; border: 1px solid black; margin: 0 auto;">
   <pre>
   git clone https://github.com/pierce403/nweb.git
   cd nweb/nweb-agent
   sed -i -e s/REPLACE_ME/{{submit_token}}/ agent_env
   ./nweb-agent.py
   </pre>
+  </div>
 {% endif %}
 
 </center>
