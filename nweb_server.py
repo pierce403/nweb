@@ -136,6 +136,8 @@ def submit():
     nweb.newhost(newhost)
 
   except Exception as e:
+    print("[EE] BAD SUBMISSION ERROR!!")
+    print(e)
     return "[-] bad submission data : "+str(e)
 
   #return str(newhost)
