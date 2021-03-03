@@ -137,6 +137,7 @@ def submit():
 
   except Exception as e:
     print("[EE] BAD SUBMISSION ERROR!!")
+    print(e.__traceback__.tb_lineno)
     print(e)
     return "[-] bad submission data : "+str(e)
 
