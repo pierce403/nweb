@@ -5,5 +5,5 @@ class Config:
         self.server = 'https://nweb.io/'
         self.max_threads = 3
         self.timeout = 360
-        self.submit_token = os.environ.get("submit_token") or None
+        self.submit_token = os.environ.get("SUBMITTOKEN") or None
 
