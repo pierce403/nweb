@@ -121,9 +121,8 @@ def submit():
   except Exception as e:
     return "[!] Couldn't find necessary data: "+str(e)
 
-  if len(newhost['ports']) == 0:
+  if len(newhost['ports']) == 2: # this is a string []
     return "[!] No open ports found!"
-  print("number of open ports: "+str(len(newhost['ports'])))
   
   if len(newhost['ports']) > 500:
     return "[!] More than 500 ports found. This is probably an IDS/IPS. We're going to throw the data out."
