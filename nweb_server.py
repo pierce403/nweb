@@ -143,7 +143,7 @@ def submit():
     return "[-] bad submission data : "+str(e)
 
   #return str(newhost)
-  return "[+] nmap successful and submitted for ip: "+newhost['ip']+"\nhostname: "+newhost['hostname']+"\nports: "+newhost['ports']
+  return "[+] nmap successful and submitted for ip: "+str(newhost['ip'])+"\nhostname: "+str(newhost['hostname'])+"\nports: "+str(newhost['ports'])
 
 @app.route('/leaderboard')
 #@jwt_required
