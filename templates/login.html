@@ -24,7 +24,10 @@ Welcome {{user}}!
   
   # put the submit token in the environment
   sed -i -e s/REPLACE_ME/{{submit_token}}/ agent_env
-  
+ 
+  # ensure the SUBMITTOKEN env variable is loaded
+  source agent_env
+ 
   # run the agent (sometimes good to run in screen)
   ./nweb-agent.py 
   </pre>
