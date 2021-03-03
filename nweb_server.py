@@ -123,7 +123,7 @@ def submit():
 
   if len(newhost['ports']) == 0:
     return "[!] No open ports found!"
-  print("number of open ports: "+len(newhost['ports']))
+  print("number of open ports: "+str(len(newhost['ports'])))
   
   if len(newhost['ports']) > 500:
     return "[!] More than 500 ports found. This is probably an IDS/IPS. We're going to throw the data out."
