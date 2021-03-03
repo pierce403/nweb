@@ -128,7 +128,7 @@ def submit():
     return "[!] More than 500 ports found. This is probably an IDS/IPS. We're going to throw the data out."
 
   try:
-    print("[+] nmap successful and submitted for ip: "+newhost['ip']+"\nhostname: "+newhost['hostname']+"\nports: "+newhost['ports'])    
+    print("[+] nmap successful and submitted for ip: "+str(newhost['ip'])+"\nhostname: "+str(newhost['hostname'])+"\nports: "+str(newhost['ports']))    
 
     print("submit token is "+str(newhost['submit_token']))
     newhost['user']=users.bump_user(str(newhost['submit_token']))
