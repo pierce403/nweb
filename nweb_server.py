@@ -130,7 +130,8 @@ def submit():
   try:
     print("[+] nmap successful and submitted for ip: "+newhost['ip']+"\nhostname: "+newhost['hostname']+"\nports: "+newhost['ports'])    
 
-    newhost['user']=users.bump_user(newhost['submit_token'])
+    print("submit token is "+str(newhost['submit_token']))
+    newhost['user']=users.bump_user(str(newhost['submit_token']))
     del newhost['submit_token'] # make sure not to leak the submit tokens (anymore)
 
     nweb.newhost(newhost)
