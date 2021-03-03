@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Table, Column, Float, Integer, String, DateTime, MetaData, ForeignKey, func
 import os
 import random
+import string
 
 db=SQLAlchemy()
 
