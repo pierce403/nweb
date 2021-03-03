@@ -135,8 +135,8 @@ def submit():
 
     nweb.newhost(newhost)
 
-  except:
-    return "[-] bad submission data"
+  except Exception as e:
+    return "[-] bad submission data : "+str(e)
 
   #return str(newhost)
   return "[+] nmap successful and submitted for ip: "+newhost['ip']+"\nhostname: "+newhost['hostname']+"\nports: "+newhost['ports']
