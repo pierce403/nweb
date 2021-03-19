@@ -101,8 +101,11 @@ def search():
   # what kind of output are we looking for?
   if format == 'hostlist':
     return render_template("hostlist.html",query=query, numresults=count, page=page, hosts=context)
-  else:
-    return render_template("search.html",query=query, numresults=count, page=page, hosts=context, next_url=next_url, prev_url=prev_url)
+  if format == 'json':
+    response = render_template("json.html",query=query, numresults=count, page=page, hosts=context)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+  return render_template("search.html",query=query, numresults=count, page=page, hosts=context, next_url=next_url, prev_url=prev_url)
 
 @app.route('/getwork')
 def getwork():
