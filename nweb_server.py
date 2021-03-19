@@ -22,7 +22,13 @@ from nmap_helper import * # get_ip etc
 from datetime import datetime
 
 app = Flask(__name__,static_url_path='/static')
-Talisman(app,content_security_policy=os.environ.get("CSP_DIRECTIVES", DEFAULT_CSP_POLICY))
+
+if os.environ.get("DEBUG") == "True":
+  print("[-] DEBUG ENABLED, DISABLING TALISMAN")
+else:
+  print("[+] ENABLING TALISMAN")
+  Talisman(app,content_security_policy=os.environ.get("CSP_DIRECTIVES", DEFAULT_CSP_POLICY))
+
 app.jinja_env.add_extension('jinja2.ext.do')
 
 # Setup the Flask-JWT-Extended extension
@@ -69,6 +75,11 @@ def host():
   context = nweb.gethost(host)
   return render_template("host.html",**context)
 
+@app.route('/beta')
+def test():
+  return render_template("index.html")
+
+@app.route('/search')
 @app.route('/')
 def search():
   query = request.args.get('q', '')

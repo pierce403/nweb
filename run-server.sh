@@ -19,6 +19,6 @@ pip3 install -r requirements.txt
 while [ 1 == 1 ]
 do
   echo `date` >> start.log
-  flask run --with-threads --host=0.0.0.0
+  flask run --with-threads --host=0.0.0.0 --port=5000
   sleep 5
 done
