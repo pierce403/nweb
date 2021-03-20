@@ -22,7 +22,12 @@ function nwebSearch()
    row.insertCell().innerText = host.nmap_data;
 
   }
-     })
+  document.getElementById("message").textContent = "Searching for '"+search+"' *complete*";
+
+  })
   
 
 }
+
+document.getElementById("nweb-search").value="nmap";
+nwebSearch();
