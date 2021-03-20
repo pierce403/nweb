@@ -1,10 +1,28 @@
 function nwebSearch()
-{
+{      
   console.log("HELLO THERE");
+       
+  search = document.getElementById("nweb-search").value;
+  document.getElementById("message").textContent = "Searching for '"+search+"'";
 
-  document.getElementById("message").textContent = "Hey, thanks for searching";
-
-  fetch('search?q=hostname:softbank219168179195.bbtec.net&f=json')
+  nwebResult = fetch('search?f=json&q='+search)
     .then(response => response.json())
-    .then(data => console.log(data));
+    .then(function(data){
+       let nwebTable = document.getElementById("nweb-table");
+       console.log(data);
+       nwebTable.innerHTML = ""
+
+  for(let host of data)
+  {
+   console.log(host.hostname);
+   let row = nwebTable.insertRow(-1);
+   left = host.ip+'\n\nhostname: '+host.hostname+'\nports: '+host.ports
+
+   row.insertCell().innerText = left;
+   row.insertCell().innerText = host.nmap_data;
+
+  }
+     })
+  
+
 }
