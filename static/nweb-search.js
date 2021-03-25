@@ -6,6 +6,9 @@ document.getElementById('nweb-search-form').addEventListener('submit', function(
 function nwebSearch()
 {      
   console.log("Running new search");
+  
+  // clear table before starting search
+  let nwebTable = document.getElementById("nweb-table");
   nwebTable.innerHTML = ""
        
   search = document.getElementById("nweb-search").value;
