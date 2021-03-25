@@ -5,7 +5,8 @@ document.getElementById('nweb-search-form').addEventListener('submit', function(
 
 function nwebSearch()
 {      
-  console.log("HELLO THERE");
+  console.log("Running new search");
+  nwebTable.innerHTML = ""
        
   search = document.getElementById("nweb-search").value;
   document.getElementById("message").textContent = "Searching for '"+search+"'";
