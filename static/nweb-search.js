@@ -1,3 +1,8 @@
+document.getElementById('nweb-search-form').addEventListener('submit', function(e) {
+    nwebSearch();
+    e.preventDefault();
+}, false);
+
 function nwebSearch()
 {      
   console.log("HELLO THERE");
