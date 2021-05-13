@@ -37,7 +37,7 @@ def bump_user(submit_token):
   print("!!! DID A THING "+submit_token)
   if not thisuser:
     print("!!! INVALID SUBMIT TOKEN "+submit_token)
-    return "invalid submit token: '"+newhost['submit_token']+"'"
+    return "invalid submit token: "+submit_token
   print("!!! SEEMS LIKE A USER "+str(submit_token))
   print("!!! HELLO "+str(thisuser.address))
   thisuser.points_earned=thisuser.points_earned+1
