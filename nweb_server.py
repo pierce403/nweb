@@ -146,7 +146,7 @@ def submit():
     newhost['user']=users.bump_user(str(newhost['submit_token']))
     del newhost['submit_token'] # make sure not to leak the submit tokens (anymore)
 
-    nweb.newhost(newhost)
+    nweb.addhost(newhost)
 
   except Exception as e:
     print("[EE] BAD SUBMISSION ERROR!!")
