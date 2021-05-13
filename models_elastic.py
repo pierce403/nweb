@@ -31,7 +31,7 @@ def search(query, limit, offset):
   return 0,results
   #return result['hits']['total'],results
 
-def newhost(host):
+def addhost(host):
   ip = str(host['ip'])
   # broken in ES6
   es.index(index=history_index, doc_type='_doc', body=host)
