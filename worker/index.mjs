@@ -83,6 +83,7 @@ const worker={async fetch(request,env){
   }
   if(path==='/submit'&&request.method==='POST')return await submit(request,env);
   if(path==='/getwork'){
+   if(env.READ_ONLY==='true')return text('ERROR',503);
    try{
     for(let i=0;i<5;i++){
      const subnet=Math.floor(Math.random()*256)+'.'+Math.floor(Math.random()*256)+'.0.0/16';const result=await elastic(env,'/nweb_hosts/_search',{size:1000,query:{term:{ip:subnet}},sort:{timestamp:{order:'asc'}}});const hits=result.hits?.hits||[];if(!hits.length)continue;
