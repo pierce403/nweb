@@ -52,5 +52,11 @@
         }
       ]
     }
-  }
+  },
+  "routes": [
+    {
+      "pattern": "nweb.io/*",
+      "zone_id": "005b5bf624e1e1d6c476a94a389c1145"
+    }
+  ]
 }

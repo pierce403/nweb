@@ -37,3 +37,8 @@ Postgres exports and verify custom-host HTTPS/browser reads before enabling writ
 Keep source data/deployments for recovery. After writes, rollback first freezes
 Cloudflare and transfers accepted users/point changes back to PostgreSQL; it must
 also reconcile pending indexed submissions rather than changing DNS alone.
+
+Final production checkpoint: the original session issuer and ELASTIC identity are
+transferred. Two frozen COBALT snapshots reconcile all four users and every field
+through D1 and reverse PostgreSQL. The external index has an expired certificate
+(verification code10), so production stays read-only and reports503 pending repair.
