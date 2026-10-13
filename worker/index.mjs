@@ -12,7 +12,7 @@ const text=(body,status=200)=>respond(body,status,'text/plain; charset=utf-8');
 const json=(body,status=200)=>respond(JSON.stringify(body),status,'application/json');
 const render=(name,context={})=>views.render(name,{...context,g:{preview_length:100}});
 function notice(response,env,message){
- const statusMessage=message||(env.READ_ONLY==='true'?'The site is temporarily read-only during migration.':'');
+ const statusMessage=message||(env.STAGING==='true'?'Synthetic staging only. Search and submission data are fixtures.':env.READ_ONLY==='true'?'The site is temporarily read-only during migration.':'');
  const escaped=statusMessage.replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
  return statusMessage?new HTMLRewriter().on('body',{element(e){e.prepend('<p role="status">'+escaped+'</p>',{html:true})}}).transform(response):response;
 }
