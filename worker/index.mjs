@@ -57,7 +57,7 @@ async function submit(request,env){
  return text('[+] nmap successful and submitted for ip: '+parsed.ip+'\nhostname: '+parsed.hostname+'\nports: '+parsed.ports);
 }
 const worker={async fetch(request,env){
- if(request.method==='HEAD'){const r=await worker.fetch(new Request(request,{method:'GET'}),env);await r.body?.cancel();return new Response(null,{status:r.status,headers:r.headers});}
+ if(request.method==='HEAD'){const r=await worker.fetch(new Request(request,{method:'GET'}),{...env,READ_ONLY:'true'});await r.body?.cancel();return new Response(null,{status:r.status,headers:r.headers});}
  const url=new URL(request.url),path=url.pathname;
  if(url.protocol!=='https:'){url.protocol='https:';return Response.redirect(url.toString(),308);}
  if(env.READ_ONLY==='true'&&!['GET','HEAD'].includes(request.method))return text('The site is temporarily read-only during migration.',503);
