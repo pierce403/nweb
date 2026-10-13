@@ -22,3 +22,5 @@ fs.writeFileSync('build/assets/static/navigation.js',`document.querySelector('.n
 const commit=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();
 fs.writeFileSync('build/version.mjs',`export const commit=${JSON.stringify(commit)};\n`);
 fs.writeFileSync('build/assets/deployment.json',JSON.stringify({repository:'pierce403/nweb',commit,originalHerokuCommit:'2af40220d49238d58cb7027892dd693aa8f4404a'})+'\n');
+
+if(fs.existsSync('static/favicon.ico'))fs.copyFileSync('static/favicon.ico','build/assets/favicon.ico');
