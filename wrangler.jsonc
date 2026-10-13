@@ -9,7 +9,8 @@
     "directory": "build/assets",
     "binding": "ASSETS",
     "run_worker_first": true,
-    "not_found_handling": "none"
+    "not_found_handling": "none",
+    "html_handling": "none"
   },
   "vars": {
     "READ_ONLY": "true",

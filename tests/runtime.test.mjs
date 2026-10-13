@@ -19,14 +19,14 @@ test('wallet identity and legacy JWT interface reject wrong signers, domains, ex
 test('actual Nweb Worker preserves query formats, private token identity, retry accounting and frozen state',async()=>{
  execFileSync(process.execPath,['node_modules/wrangler/bin/wrangler.js','deploy','--dry-run','--env','','--outdir','build/worker'],{stdio:'pipe'});
  let failIndex=false;const calls=[];
- const base={name:'nweb-test',modules:true,scriptPath:'build/worker/index.js',compatibilityDate:'2026-10-13',bindings:{STAGING:'false',READ_ONLY:'false',AUTH_DOMAIN:'nweb.test',JWT_SECRET_KEY:'synthetic-test-session-only-32-bytes',ELASTIC:'https://fixture-user:fixture-pass@elastic.test',CSP_POLICY:"default-src 'self' 'unsafe-inline'; img-src 'self' data:",HSTS_POLICY:'max-age=31556926; includeSubDomains'},d1Databases:{DB:'synthetic-users'},assets:{directory:'build/assets',binding:'ASSETS',run_worker_first:true},outboundService:async request=>{
+ const base={name:'nweb-test',modules:true,scriptPath:'build/worker/index.js',compatibilityDate:'2026-10-13',bindings:{STAGING:'false',READ_ONLY:'false',AUTH_DOMAIN:'nweb.test',JWT_SECRET_KEY:'synthetic-test-session-only-32-bytes',ELASTIC:'https://fixture-user:fixture-pass@elastic.test',CSP_POLICY:"default-src 'self' 'unsafe-inline'; img-src 'self' data:",HSTS_POLICY:'max-age=31556926; includeSubDomains'},d1Databases:{DB:'synthetic-users'},assets:{directory:'build/assets',binding:'ASSETS',run_worker_first:true,html_handling:'none'},outboundService:async request=>{
   const url=new URL(request.url);assert.equal(url.hostname,'elastic.test');assert.equal(url.username,'');assert.equal(url.password,'');assert.equal(request.headers.get('Authorization'),'Basic '+btoa('fixture-user:fixture-pass'));const body=request.method==='GET'?null:await request.json();calls.push({path:url.pathname,method:request.method,body});
   if(failIndex)return new Response('{}',{status:503,headers:{'Content-Type':'application/json'}});
   if(request.method==='PUT'){assert.equal(body.submit_token,undefined);return Response.json({result:'created'});}
   const doc={ip:'203.0.113.10',hostname:'<script>fixture</script>',ports:'[443]',timestamp:'2026-10-13T00:00:00',nmap_data:Array.from({length:105},(_,i)=>'line '+i).join('\n')+'\n<script>fixture</script>',submit_token:'legacy-token-must-not-leak',custom_field:'retained'};
   return Response.json(url.pathname.includes('/_doc/')?{_source:doc}:{hits:{total:{value:41},hits:[{_source:doc}]}});
  }};
- const convert=options=>{const result=convertV4MiniflareOptions(options);result.workers[0].config.assets.hasUserWorker=true;return result;};
+ const convert=options=>{const result=convertV4MiniflareOptions(options);result.workers[0].config.assets.hasUserWorker=true;result.workers[0].config.assets.htmlHandling='none';return result;};
  const mf=new Miniflare(convert(base));
  try{
   let db=await mf.getD1Database('DB');for(const sql of fs.readFileSync('migrations/0001_users.sql','utf8').split(';').filter(x=>x.trim()))await db.prepare(sql).run();
@@ -47,6 +47,7 @@ test('actual Nweb Worker preserves query formats, private token identity, retry 
   r=await mf.dispatchFetch('https://nweb.test/');assert.equal(r.status,503);assert.match(await r.text(),/search index is currently unavailable/);failIndex=false;
   r=await send(scan+'\nSecond controlled fixture.');assert.equal(r.status,200);await r.text();assert.equal((await db.prepare('SELECT points_earned FROM users WHERE address=?').bind(owner.address).first()).points_earned,2);
   r=await mf.dispatchFetch('https://nweb.test/leaderboard');assert.match(await r.text(),new RegExp(owner.address));assert.match(await mf.dispatchFetch('https://nweb.test/static/css/bootstrap.min.css').then(x=>x.text()),/Bootstrap/);
+  r=await mf.dispatchFetch('https://nweb.test/beta',{redirect:'manual'});assert.equal(r.status,200);assert.match(await r.text(),/nweb/i);
   r=await mf.dispatchFetch('https://nweb.test/missing');assert.equal(r.status,404);await r.text();r=await mf.dispatchFetch('http://nweb.test/search?q=x',{redirect:'manual'});assert.equal(r.status,308);assert.equal(r.headers.get('Location'),'https://nweb.test/search?q=x');await r.text();
   const snapshot=async()=>JSON.stringify((await db.prepare('SELECT * FROM users ORDER BY address').all()).results);const before=await snapshot();await mf.setOptions(convert({...base,bindings:{...base.bindings,READ_ONLY:'true'}}));db=await mf.getD1Database('DB');
   r=await send();assert.equal(r.status,503);await r.text();r=await mf.dispatchFetch('https://nweb.test/login',{headers:{Cookie:cookie}});assert.match(await r.text(),/temporarily read-only/);assert.equal(await snapshot(),before);
