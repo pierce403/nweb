@@ -1,0 +1,20 @@
+{
+  "name": "nweb-cloudflare",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "deploy": "wrangler deploy --env \"\""
+  },
+  "dependencies": {
+    "ethers": "6.17.0",
+    "jose": "6.2.12",
+    "nunjucks": "3.2.4"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "wrangler": "4.149.0",
+    "miniflare": "5.20261006.1-alpha"
+  }
+}

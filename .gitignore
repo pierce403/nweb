@@ -4,3 +4,9 @@ __pycache__
 start.log
 nweb.db
 environment.conf
+
+node_modules/
+.env*
+.dev.vars*
+.wrangler/
+build/

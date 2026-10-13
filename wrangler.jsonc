@@ -1,0 +1,55 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "nweb-io",
+  "main": "worker/index.mjs",
+  "compatibility_date": "2026-10-13",
+  "workers_dev": true,
+  "preview_urls": false,
+  "assets": {
+    "directory": "build/assets",
+    "binding": "ASSETS",
+    "run_worker_first": true,
+    "not_found_handling": "none"
+  },
+  "vars": {
+    "READ_ONLY": "true",
+    "STAGING": "false",
+    "AUTH_DOMAIN": "nweb.io",
+    "CSP_POLICY": "default-src 'self' 'unsafe-inline'; img-src 'self' data:",
+    "HSTS_POLICY": "max-age=31556926; includeSubDomains"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "nweb-production",
+      "database_id": "702bb1c9-2d0e-4594-8aaf-5865666e70ac",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "observability": {
+    "enabled": true
+  },
+  "env": {
+    "staging": {
+      "name": "nweb-io-staging",
+      "routes": [],
+      "workers_dev": true,
+      "preview_urls": false,
+      "vars": {
+        "READ_ONLY": "false",
+        "STAGING": "true",
+        "AUTH_DOMAIN": "nweb-io-staging.bcrt43.workers.dev",
+        "CSP_POLICY": "default-src 'self' 'unsafe-inline'; img-src 'self' data:",
+        "HSTS_POLICY": "max-age=31556926; includeSubDomains"
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "nweb-staging",
+          "database_id": "85b93312-6502-4f89-811b-3a9be9e18d57",
+          "migrations_dir": "migrations"
+        }
+      ]
+    }
+  }
+}
