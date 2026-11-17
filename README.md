@@ -97,3 +97,12 @@ Step 5:
 Step 6:
 
 Check out https://nweb.io/leaderboard to see if you're on the leaderboard.
+
+## License
+
+Original project code and documentation are licensed under the
+[Apache License 2.0](LICENSE). Third-party dependencies, source excerpts,
+assets, and other third-party material retain their respective licenses and
+copyright notices; this grant does not relicense that material.
+
+Existing project copyright and attribution text is preserved in [NOTICE](NOTICE).
